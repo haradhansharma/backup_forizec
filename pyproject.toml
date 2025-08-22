@@ -1,0 +1,21 @@
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+skip-string-normalization = true  # optional, preserves single vs double quotes
+
+[tool.ruff]
+# Global Ruff settings
+line-length = 100
+# Optional: Exclude certain files/directories
+exclude = ["env/", "migrations/", "media/", "static/", ".venv/"]
+
+[tool.ruff.lint]
+# Linters to select
+select = ["E", "F", "I", "UP", "B", "SIM", "ASYNC", "S", "RUF"]
+
+# Linters to ignore
+ignore = ["E501"]  # line length is handled by black
+
+# Optional additional settings
+extend-ignore = []
+per-file-ignores = { "tests/*" = ["D", "S101"] }  # example: allow docstring/style lenient in tests
