@@ -1,26 +1,26 @@
 # app/main.py
 # This file initializes the FastAPI application and sets up the necessary configurations.
-from contextlib import asynccontextmanager
 import time
-from pathlib import Path
+from contextlib import asynccontextmanager
+
 # from pydantic_settings import BaseSettings, SettingsConfigDict
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse, JSONResponse
-from fastapi.templating import Jinja2Templates
+from fastapi.exceptions import HTTPException, RequestValidationError
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
-from app.core.config import settings
-from app.core.db import Base, engine
+from fastapi.templating import Jinja2Templates
+from sqlalchemy.exc import IntegrityError
+
 # from sqlalchemy.ext.asyncio import async_engine_from_config
-from app.api.v1.routes import admin, user, auth
+from app.api.v1.routes import admin, auth, user
+from app.core.config import settings
+from app.core.db import engine
 from app.core.exceptions import (
-    validation_exception_handler,
+    generic_exception_handler,
     http_exception_handler,
     integrity_error_handler,
-    generic_exception_handler
+    validation_exception_handler,
 )
-from fastapi.exceptions import RequestValidationError, HTTPException
-from sqlalchemy.exc import IntegrityError
-from starlette.exceptions import HTTPException as StarletteHTTPException
 
 
 @asynccontextmanager

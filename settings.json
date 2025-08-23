@@ -1,0 +1,38 @@
+{
+    // ================================
+    // Python formatting
+    // ================================
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": [
+        "--line-length", "100"
+    ],
+    "editor.formatOnSave": true,  
+
+    // ================================
+    // Python linting (Ruff)
+    // ================================
+    "python.linting.enabled": true,
+    "python.linting.ruffEnabled": true,
+    "python.linting.ruffArgs": [
+        "--fix"   // Auto-fix fixable issues
+    ],
+
+    // ================================
+    // Code actions on save (combined)
+    // ================================
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": false,  // Organize imports
+        "source.fixAll": true            // Apply all auto-fixable problems (e.g., Ruff)
+    },
+
+    // ================================
+    // Optional: Exclude certain folders
+    // ================================
+    "files.exclude": {
+        "**/.venv": true,
+        "**/env": true,
+        "**/migrations": true,
+        "**/static": true,
+        "**/media": true
+    }
+}

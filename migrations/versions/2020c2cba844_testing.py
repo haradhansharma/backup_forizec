@@ -1,10 +1,11 @@
 """testing
 
 Revision ID: 2020c2cba844
-Revises: 
+Revises:
 Create Date: 2025-08-21 16:24:34.933017
 
 """
+
 from typing import Sequence, Union
 
 from alembic import op

@@ -6,6 +6,7 @@ from playwright.async_api import async_playwright
 
 BASE_URL = "http://localhost:8017"
 
+
 @pytest.mark.asyncio
 async def test_homepage_flow():
     async with async_playwright() as p:
@@ -13,7 +14,7 @@ async def test_homepage_flow():
         page = await browser.new_page()
 
         # visit homepage
-        await page.goto(BASE_URL+"/")
+        await page.goto(BASE_URL + "/")
         assert await page.title() == "Welcome to Forizec"
         assert "Welcome to Forizec" in await page.content()
 
@@ -23,6 +24,7 @@ async def test_homepage_flow():
 
         await browser.close()
 
+
 @pytest.mark.asyncio
 async def test_login_flow():
     async with async_playwright() as p:
@@ -30,7 +32,7 @@ async def test_login_flow():
         page = await browser.new_page()
 
         # visit login page
-        await page.goto(BASE_URL+"/auth/login")
+        await page.goto(BASE_URL + "/auth/login")
         assert "Login" in await page.title()
 
         # fill login form
@@ -39,7 +41,7 @@ async def test_login_flow():
         await page.click("button[type='submit']")
 
         # assert redirection to dashboard
-        assert "/dashboard" in page.url 
+        assert "/dashboard" in page.url
         assert "Welcome back, testuser" in await page.content()
 
         await browser.close()

@@ -2,8 +2,10 @@
 # Test database relationships and constraints.
 
 import pytest
-from sqlalchemy.exc.asyncio import AsyncSession 
+from sqlalchemy.exc.asyncio import AsyncSession
+
 # from app.models import User, Post  # Example models
+
 
 # one to many
 @pytest.mark.asyncio
@@ -20,6 +22,7 @@ async def test_user_post_relationship(async_session: AsyncSession):
     assert len(user.posts) == 1
     assert user.posts[0].title == "Test Post"
 
+
 # one to many with comments
 @pytest.mark.asyncio
 async def test_post_comments_relationship(async_session: AsyncSession):
@@ -34,6 +37,7 @@ async def test_post_comments_relationship(async_session: AsyncSession):
     await async_session.refresh(post)
     assert len(post.comments) == 2
     assert {c.content for c in post.comments} == {"First comment", "Second comment"}
+
 
 # many to many
 @pytest.mark.asyncio

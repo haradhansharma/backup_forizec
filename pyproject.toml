@@ -1,6 +1,8 @@
+# project.toml
+
 [tool.black]
 line-length = 100
-target-version = ["py311"]
+target-version = ["py310"]
 skip-string-normalization = true  # optional, preserves single vs double quotes
 
 [tool.ruff]
@@ -16,6 +18,5 @@ select = ["E", "F", "I", "UP", "B", "SIM", "ASYNC", "S", "RUF"]
 # Linters to ignore
 ignore = ["E501"]  # line length is handled by black
 
-# Optional additional settings
-extend-ignore = []
-per-file-ignores = { "tests/*" = ["D", "S101"] }  # example: allow docstring/style lenient in tests
+# Move per-file-ignores here under lint
+per-file-ignores = { "tests/*" = ["D", "S101"], "forizec.py" = ["S603", "S607"] }

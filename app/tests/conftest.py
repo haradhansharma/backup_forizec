@@ -1,11 +1,12 @@
 # app/tests/conftest.py
 # This file sets up the testing environment for the FastAPI application using pytest and pytest-async
 import pytest_asyncio
-from httpx import AsyncClient, ASGITransport
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from httpx import ASGITransport, AsyncClient
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
-from app.main import create_app
+
 from app.core.db import Base, get_async_session
+from app.main import create_app
 
 # ---------------------
 # Test Database Configuration
@@ -29,14 +30,17 @@ AsyncSessionLocal = sessionmaker(
     expire_on_commit=False,
 )
 
+
 # Dependency override for FastAPI
 async def override_get_async_session():
     async with AsyncSessionLocal() as session:
         yield session
 
+
 # ---------------------
 # Pytest Fixtures
 # ---------------------
+
 
 @pytest_asyncio.fixture(scope="session", autouse=True)
 async def prepare_database():
@@ -47,6 +51,7 @@ async def prepare_database():
     async with engine_test.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
     await engine_test.dispose()
+
 
 @pytest_asyncio.fixture
 async def client():

@@ -33,15 +33,17 @@ db_url = os.getenv("DATABASE_URL", settings.EFFECTIVE_DATABASE_URL)
 # Inject URL into alembic's config so async_engine_from_config sees it
 config.set_main_option("sqlalchemy.url", db_url)
 
+
 # Enable SQLite-friendly batch mode when needed
 def _is_sqlite(url: str) -> bool:
     return url.startswith("sqlite")
+
 
 def get_context_kwargs():
     # Common config for context.configure()
     kwargs = dict(
         target_metadata=target_metadata,
-        compare_type=True,   # detect column type changes
+        compare_type=True,  # detect column type changes
         compare_server_default=True,
         render_as_batch=_is_sqlite(db_url),  # important for SQLite
     )

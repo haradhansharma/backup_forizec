@@ -1,5 +1,26 @@
 # Usefull commands for forizec project
 
+## **Environment preparation**
+### Prepare development Environment
+```bash
+pyton forizec.py prepare
+```
+This command setup the local developement environment by performing the following steps:
+- Create a python virtual environment (`env/`) if not already present.
+- Install dependency from `requirements.txt`. **Will fail with clear message if the file is missing.**
+- Install Playwright Browser
+- Create project directory if missing:
+    - `data/` -> store the SQLite DB and other runtime files.
+    - `static/` -> serve static assets (CSS, JS, Images).
+    - `media/` -> for user-uploaded media.
+    - `templates` -> for HTML templates.
+- Generate a `.env` file with the default placeholder if it does not exists.
+- **Note:** This command is crossplatform aware and works on linux, macOS, and windows.
+- **Idempotency:** Running `prepare` multiple times willnot overwrite existing folders or `.env`.
+
+
+
+
 ## **Black** and **Ruff** Section
 This section contains helpfull commands for formatting, linting and maintainning code quality using **Black** and **Ruff**
 ---
@@ -7,23 +28,29 @@ This section contains helpfull commands for formatting, linting and maintainning
 ### Check formatting / linting
 #### **Black** (Check only, does not modify files)
 ```bash
-black --check
+black --check .
 ```
 #### **Ruff** (Lint only, does not modify files)
 ```bash
 ruff check .
-# or using the new config section
-ruff lint .
+# or You can also check a single file
+ruff check app/main.py
+
 ```
+**Note:** Older Ruff versions may have used `ruff lint .`, but the correct modern usage is `ruff check .`.
+
+
 
 ### Auto-Formate / Fix Issues
-#### **Black** (Formate file in place)
+#### **Black** (Formate files in place)
 ```bash
 black .
 ```
 #### **Ruff** (Auto-fix fixable issues)
 ```bash
 ruff check . --fix
+# or You can also fix a single file
+ruff check app/main.py --fix
 ```
 ### Combined workflow (opional)
 Run both linters in one go
@@ -44,13 +71,21 @@ black --diff .
 - `select` / `ignore` -> Override pyproject.toml temporarily (Ruff)
 ```bash
 ruff check . --select E,F
+ruff check . --ignore E501 # Ignore specific rules
 ```
+### Check a specific file or folder
+```bash
+ruff check app/ # Lint the entire folder
+ruff check app/main.py # Lint a single file
+```
+
 ### Optional: Pre-commit Hook
 You can setup a pre-commit hook to autometically run Black + Ruff before each commit to mintain code quality.
 ```bash
 pre-commit install
 pre-commit run --all-files
 ```
+**Tip:** Combine this with .pre-commit-config.yaml to enforce formatting and linting in your CI/CD pipeline.
 
 ## Forizec CLI command section
 
@@ -117,6 +152,7 @@ python forizec.py dburl
 - Print the current database url configured in `.env` or settings.
 
 ### **Test Commands**
+Before running tests, **ensure your server url, routes, or necessary fixures exists** (e.g., `api/v1/user/me`, login routes) and the database initialized properly.
 #### **Run relationshi Tests**
 ```bash
 python forizec.py test-relationships
@@ -130,12 +166,15 @@ python forizec.py test-relationships --k
 python forizec.py test-api
 ```
 - Tests all JSON API endpoints (GET, POST, PUT, PATCH, DELETE).
+- Use test data and headers where required, ensuring correct response status, content type, and response body.
+- Example reference: `app/tests/test_api_routes.py`
 
 #### **Run HTML Route Tests**
 ```bash
 python forizec.py test-html
 ```
 - Tests all HTML endpoints and templates rendering.
+- Checks response code and expected test in rendered templates.
 
 #### **Run End-to-End Playwright Tests**
 ```bash
@@ -143,7 +182,7 @@ python forizec.py test-e2e
 # Run in non-headless mode for debugging
 python forizec.py test-e2e --headless False
 ```
-- Execute Browser based workflows using Playwright.
+- Execute Browser based workflows using Playwright, validating full user interaction flows.
 
 #### **Run all Tests**
 ```bash

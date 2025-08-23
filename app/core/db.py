@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from sqlalchemy import MetaData
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 from app.core.config import settings
 
@@ -32,6 +32,7 @@ async_session_maker = sessionmaker(
     class_=AsyncSession,
     expire_on_commit=False,
 )
+
 
 async def get_async_session() -> AsyncSession:
     async with async_session_maker() as session:

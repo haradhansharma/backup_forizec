@@ -1,15 +1,16 @@
 # app/core/config.py
 # This file contains the configuration settings for the Forizec application.
 
-from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import computed_field
 from pathlib import Path
 
+from pydantic import computed_field
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent  # app/core/config.py is 3 levels deep
 
+
 class Settings(BaseSettings):
-    ENV: str = "dev"          # dev | staging | prod
+    ENV: str = "dev"  # dev | staging | prod
     DEBUG: bool = True
     DB_BACKEND: str = "sqlite"  # sqlite | mysql | postgresql
 
@@ -35,7 +36,6 @@ class Settings(BaseSettings):
     STATIC_DIR: Path = BASE_DIR / "static"
     MEDIA_DIR: Path = BASE_DIR / "media"
     TEMPLATES_DIR: Path = BASE_DIR / "templates"
-    
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -55,7 +55,9 @@ class Settings(BaseSettings):
         elif self.DB_BACKEND == "mysql":
             # allow empty password safely
             pw = self.DB_PASSWORD or ""
-            return f"mysql+asyncmy://{self.DB_USER}:{pw}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+            return (
+                f"mysql+asyncmy://{self.DB_USER}:{pw}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+            )
         elif self.DB_BACKEND in ("postgresql", "postgres"):
             pw = self.DB_PASSWORD or ""
             return f"postgresql+asyncpg://{self.DB_USER}:{pw}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
