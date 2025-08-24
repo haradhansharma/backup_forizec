@@ -7,6 +7,7 @@ from contextlib import asynccontextmanager
 # from pydantic_settings import BaseSettings, SettingsConfigDict
 from fastapi import FastAPI, Request
 from fastapi.exceptions import HTTPException, RequestValidationError
+from starlette.exceptions import HTTPException as StarletHTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -14,18 +15,12 @@ from sqlalchemy.exc import IntegrityError
 
 # from sqlalchemy.ext.asyncio import async_engine_from_config
 from app.api.v1.routes import admin, auth, user
+from app.core.exceptions import register_exception_handlers
 from app.views.auth import router as web_auth_router
 from app.views.dashboard import router as web_dashboard_router
 from app.views.public import router as web_public_router
 from app.core.config import settings
 from app.core.db import Base, engine
-
-from app.core.exceptions import (
-    generic_exception_handler,
-    http_exception_handler,
-    integrity_error_handler,
-    validation_exception_handler,
-)
 
 from app.core.logging_config import configure_logging, get_logger
 
@@ -63,10 +58,7 @@ def create_app() -> FastAPI:
         debug=settings.DEBUG,
     )
 
-    app.add_exception_handler(RequestValidationError, validation_exception_handler)  # type: ignore
-    app.add_exception_handler(HTTPException, http_exception_handler)  # type: ignore
-    app.add_exception_handler(IntegrityError, integrity_error_handler)  # type: ignore
-    app.add_exception_handler(Exception, generic_exception_handler)
+    register_exception_handlers(app)
 
     # Mount static files
     app.mount("/static", StaticFiles(directory=settings.STATIC_DIR), name="static")
@@ -80,9 +72,9 @@ def create_app() -> FastAPI:
     app.include_router(admin.router, prefix=settings.API_V1_STR, tags=["admin"])
     app.include_router(user.router, prefix=settings.API_V1_STR, tags=["user"])
     app.include_router(auth.router, prefix=settings.API_V1_STR, tags=["auth"])
-    
-    app.include_router(web_auth_router,tags=["web"])
-    app.include_router(web_dashboard_router,tags=["web"])
+
+    app.include_router(web_auth_router, tags=["web"])
+    app.include_router(web_dashboard_router, tags=["web"])
     app.include_router(web_public_router, tags=["web"])
 
     @app.middleware("http")
@@ -95,12 +87,10 @@ def create_app() -> FastAPI:
             raise  # Let your exception handlers catch it
         process_time = time.perf_counter() - start_time
         response.headers["X-Process-Time"] = f"{process_time:.4f} seconds"
-        logger.info(f"{request.method} {request.url} - {response.status_code} [{process_time:.4f}s]")
+        logger.info(
+            f"{request.method} {request.url} - {response.status_code} [{process_time:.4f}s]"
+        )
         return response
-
-
-    
-    
 
     return app
 
