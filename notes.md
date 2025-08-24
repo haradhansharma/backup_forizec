@@ -57,7 +57,7 @@ SECRET_KEY=cfce7ae89103b425d6eca2d521bdaec8b260d90b3af32282bd4e2f8836a1abcc
 alembic init migrations
 
 ## create a revision (auto-detect changes)
-alembic revision -m "create users table" --autogenerate
+alembic revision -m "pending migrations after new" --autogenerate
 
 ## upgrade to head
 alembic upgrade head

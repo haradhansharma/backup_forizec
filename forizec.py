@@ -35,15 +35,18 @@ def run_command(cmd: list[str], **kwargs):
     console.print(f"[cyan]$ {' '.join(map(str, cmd))}[/cyan]")
     subprocess.run(cmd, check=True, **kwargs)
 
+def run_alembic_command(*args):
+    alembic_ini = BASE_DIR / "alembic.ini"
+    cmd = ["alembic", "-c", str(alembic_ini), *args]
 
-def run_alembic_command(*args: str, capture_output: bool = False):
-    """Helper to run Alembic commands with correct config."""
-    alembic_init = BASE_DIR / "alembic.ini"
-    cmd = ["alembic", "-c", str(alembic_init), *args]
     console.print(f"[cyan]Running Alembic command:[/cyan] `{' '.join(cmd)}`")
-    # typer.echo(f"Running command: {' '.join(cmd)}")
-    return subprocess.run(cmd, check=True, capture_output=True, text=True)
 
+    try:
+        # stream stdout and stderr directly
+        subprocess.run(cmd, check=True)
+    except subprocess.CalledProcessError as e:
+        console.print(f"[red]Alembic command failed with exit code {e.returncode}[/red]")
+        sys.exit(e.returncode)
 
 # ---- CLI Preparation ----
 @app.command()

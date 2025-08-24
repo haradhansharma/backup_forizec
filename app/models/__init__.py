@@ -1,3 +1,3 @@
 # import all models here to ensure metadata is populated
-# from .user import User
-# from .post import Post
+from .core_models import *
+from .enums import *
