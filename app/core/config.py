@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     # Optional one-shot override
     DATABASE_URL: str | None = None
 
-    SECRET_KEY: str
+    SECRET_KEY: str = "8f98e3609c5def7af9519661a25881125c769bc91e489e0f30c675bed209f4aa"
 
     PROJECT_NAME: str = "Forizec"
     PROJECT_VERSION: str = "1.0.0"
@@ -64,4 +64,4 @@ class Settings(BaseSettings):
         raise ValueError(f"Unsupported DB_BACKEND: {self.DB_BACKEND}")
 
 
-settings = Settings()
+settings = Settings()  # type: ignore

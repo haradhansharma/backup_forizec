@@ -1,5 +1,6 @@
 # app/main.py
 # This file initializes the FastAPI application and sets up the necessary configurations.
+
 import time
 from contextlib import asynccontextmanager
 
@@ -13,8 +14,12 @@ from sqlalchemy.exc import IntegrityError
 
 # from sqlalchemy.ext.asyncio import async_engine_from_config
 from app.api.v1.routes import admin, auth, user
+from app.views.auth import router as web_auth_router
+from app.views.dashboard import router as web_dashboard_router
+from app.views.public import router as web_public_router
 from app.core.config import settings
-from app.core.db import engine
+from app.core.db import Base, engine
+
 from app.core.exceptions import (
     generic_exception_handler,
     http_exception_handler,
@@ -22,24 +27,30 @@ from app.core.exceptions import (
     validation_exception_handler,
 )
 
+from app.core.logging_config import configure_logging, get_logger
+
+
+# configure logging ar startup
+configure_logging()
+
+logger = get_logger()
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Initialize app state or resources if needed
     app.state.settings = settings
-    # print(f"Starting Forizec App with settings: {settings.dict()}")
-    # Create async engine from settings
-    print(f"Forizec App started with BASE_DIR: {settings.BASE_DIR}")
- 
-    # if settings.DEBUG:
-    #     async with engine.begin() as conn:
-    #         # Create all tables if they don't exist
-    #         await conn.run_sync(Base.metadata.create_all)
-    yield
-    
-    print("Forizec App shutting down...")
-    await engine.dispose()
+    logger.info(f"Forizec App started with BASE_DIR: {settings.BASE_DIR}")
 
+    if settings.DEBUG and settings.ENV == "dev":
+        async with engine.begin() as conn:
+            # Create all tables if they don't exist
+            await conn.run_sync(Base.metadata.create_all)
+    yield
+
+    # print("Forizec App shutting down...")
+    logger.debug("Forizec App shutting down...")
+    await engine.dispose()
 
 
 def create_app() -> FastAPI:
@@ -52,9 +63,9 @@ def create_app() -> FastAPI:
         debug=settings.DEBUG,
     )
 
-    app.add_exception_handler(RequestValidationError, validation_exception_handler)
-    app.add_exception_handler(HTTPException, http_exception_handler)
-    app.add_exception_handler(IntegrityError, integrity_error_handler)
+    app.add_exception_handler(RequestValidationError, validation_exception_handler)  # type: ignore
+    app.add_exception_handler(HTTPException, http_exception_handler)  # type: ignore
+    app.add_exception_handler(IntegrityError, integrity_error_handler)  # type: ignore
     app.add_exception_handler(Exception, generic_exception_handler)
 
     # Mount static files
@@ -69,23 +80,29 @@ def create_app() -> FastAPI:
     app.include_router(admin.router, prefix=settings.API_V1_STR, tags=["admin"])
     app.include_router(user.router, prefix=settings.API_V1_STR, tags=["user"])
     app.include_router(auth.router, prefix=settings.API_V1_STR, tags=["auth"])
+    
+    app.include_router(web_auth_router,tags=["web"])
+    app.include_router(web_dashboard_router,tags=["web"])
+    app.include_router(web_public_router, tags=["web"])
 
     @app.middleware("http")
     async def add_process_time_header(request: Request, call_next):
         start_time = time.perf_counter()
-        # Process the request   
-        response = await call_next(request)
+        try:
+            response = await call_next(request)
+        except Exception as exc:
+            logger.exception(f"Unhandled error while processing {request.url}")
+            raise  # Let your exception handlers catch it
         process_time = time.perf_counter() - start_time
-        print(f"Request processed in {process_time:.4f} seconds")
-        # Add custom header with process time
         response.headers["X-Process-Time"] = f"{process_time:.4f} seconds"
+        logger.info(f"{request.method} {request.url} - {response.status_code} [{process_time:.4f}s]")
         return response
 
-    @app.get("/", response_class=HTMLResponse)
-    async def read_root(request: Request):
-        return templates.TemplateResponse(request,"index.html", {"request": request})
+
+    
+    
 
     return app
 
-app = create_app()
 
+app = create_app()

@@ -5,23 +5,24 @@ from typing import Optional
 from app.models.enums import UserRoleEnum
 from datetime import datetime
 
+
 class UserCreate(BaseModel):
     email: EmailStr
-    password: constr(min_length=8) # type: ignore
-    first_name: Optional[constr(max_length=100)] = None # type: ignore
-    last_name: Optional[constr(max_length=100)] = None # type: ignore
+    password: constr(min_length=8)  # type: ignore
+    first_name: Optional[constr(max_length=100)] = None  # type: ignore
+    last_name: Optional[constr(max_length=100)] = None  # type: ignore
     role: UserRoleEnum = UserRoleEnum.USER
     team: Optional[str] = None
-    
-    
+
+
 class UserUpdate(BaseModel):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     role: Optional[UserRoleEnum] = None
     team: Optional[str] = None
     is_active: Optional[bool] = None
-    
-    
+
+
 class UserOut(BaseModel):
     id: int
     email: EmailStr
@@ -35,13 +36,13 @@ class UserOut(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-    
+
 class UserInvitationCreate(BaseModel):
     email: EmailStr
     role: UserRoleEnum = UserRoleEnum.USER
     team: Optional[str] = None
-    
-    
+
+
 class UserInvitationOut(BaseModel):
     id: int
     email: EmailStr

@@ -2,6 +2,7 @@
 # This file contains the database setup and session management for the Forizec application.
 
 from __future__ import annotations
+from typing import AsyncIterator
 
 from sqlalchemy import MetaData
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
@@ -25,15 +26,29 @@ engine = create_async_engine(
     settings.EFFECTIVE_DATABASE_URL,
     echo=settings.DEBUG,
     pool_pre_ping=True,
+    # important for Postgres/MySQL
+    pool_size=10,
+    max_overflow=20,
+    pool_timeout=30,
 )
 
 async_session_maker = sessionmaker(
-    bind=engine,
+    bind=engine,  # type: ignore
     class_=AsyncSession,
     expire_on_commit=False,
-)
+)  # type: ignore
 
 
-async def get_async_session() -> AsyncSession:
-    async with async_session_maker() as session:
-        yield session
+# async def get_async_session() -> AsyncSession:
+#     async with async_session_maker() as session:
+#         yield session
+
+
+async def get_db_session() -> AsyncIterator[AsyncSession]:
+    async with async_session_maker() as session:  # type: ignore
+        try:
+            yield session
+            await session.commit()
+        except:
+            await session.rollback()
+            raise

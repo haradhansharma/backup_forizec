@@ -1,11 +1,10 @@
-"""improved models
+"""scema refactored2
 
-Revision ID: aa034f7f9724
-Revises: ae5669e6fdf3
-Create Date: 2025-08-23 20:49:13.008955
+Revision ID: 550029b30c2f
+Revises: e7d3a75a63a6
+Create Date: 2025-08-24 16:38:49.007767
 
 """
-
 from typing import Sequence, Union
 
 from alembic import op
@@ -13,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'aa034f7f9724'
-down_revision: Union[str, Sequence[str], None] = 'ae5669e6fdf3'
+revision: str = '550029b30c2f'
+down_revision: Union[str, Sequence[str], None] = 'e7d3a75a63a6'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

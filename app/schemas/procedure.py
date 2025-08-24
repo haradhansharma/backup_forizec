@@ -1,5 +1,5 @@
 # app/schemas/procedure.py
-from pydantic import BaseModel, ConfigDict  
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 from datetime import date
 from app.models.enums import PriorityEnum

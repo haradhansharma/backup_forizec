@@ -1,8 +1,9 @@
-# app/schemas/risk.py 
+# app/schemas/risk.py
 
 from pydantic import BaseModel, ConfigDict
 from datetime import date
 from typing import Optional
+
 
 class RiskCreate(BaseModel):
     date_raised: Optional[date] = None
@@ -23,6 +24,7 @@ class RiskCreate(BaseModel):
     status: str
 
     model_config = ConfigDict(from_attributes=True)
+
 
 class RiskOut(RiskCreate):
     id: int

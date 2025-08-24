@@ -1,14 +1,12 @@
 # app/core/exceptions.py
 
-import logging
-
 from fastapi import Request, status
 from fastapi.exceptions import HTTPException, RequestValidationError
 from fastapi.responses import HTMLResponse, JSONResponse
 from sqlalchemy.exc import IntegrityError
+from app.core.logging_config import get_logger
 
-logger = logging.getLogger("forizec")
-
+logger = get_logger(__name__)
 
 def want_html(request: Request) -> bool:
     """Check if the request wants HTML response."""

@@ -35,6 +35,7 @@ def run_command(cmd: list[str], **kwargs):
     console.print(f"[cyan]$ {' '.join(map(str, cmd))}[/cyan]")
     subprocess.run(cmd, check=True, **kwargs)
 
+
 def run_alembic_command(*args):
     alembic_ini = BASE_DIR / "alembic.ini"
     cmd = ["alembic", "-c", str(alembic_ini), *args]
@@ -47,6 +48,7 @@ def run_alembic_command(*args):
     except subprocess.CalledProcessError as e:
         console.print(f"[red]Alembic command failed with exit code {e.returncode}[/red]")
         sys.exit(e.returncode)
+
 
 # ---- CLI Preparation ----
 @app.command()

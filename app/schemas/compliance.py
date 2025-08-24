@@ -4,6 +4,7 @@ from typing import Optional
 from datetime import date, datetime
 from app.models.enums import TaskStatusEnum, PriorityEnum
 
+
 class ComplianceScheduleCreate(BaseModel):
     title: str
     description: Optional[str] = None
@@ -13,6 +14,7 @@ class ComplianceScheduleCreate(BaseModel):
     related_policy_id: Optional[int] = None
     related_procedure_id: Optional[int] = None
 
+
 class ComplianceScheduleUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
@@ -21,6 +23,7 @@ class ComplianceScheduleUpdate(BaseModel):
     status: Optional[TaskStatusEnum] = None
     priority: Optional[PriorityEnum] = None
     completed_at: Optional[datetime] = None
+
 
 class ComplianceScheduleOut(BaseModel):
     id: int
@@ -37,10 +40,12 @@ class ComplianceScheduleOut(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+
 class PolicyAcceptanceCreate(BaseModel):
     policy_id: int
     accepted: bool = False
     comments: Optional[str] = None
+
 
 class PolicyAcceptanceOut(BaseModel):
     id: int
@@ -52,10 +57,12 @@ class PolicyAcceptanceOut(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+
 class ProcedureAcceptanceCreate(BaseModel):
     procedure_id: int
     accepted: bool = False
     comments: Optional[str] = None
+
 
 class ProcedureAcceptanceOut(BaseModel):
     id: int
