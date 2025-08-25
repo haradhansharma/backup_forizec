@@ -16,14 +16,14 @@ engine_test = create_async_engine(
 )
 
 AsyncSessionLocal = sessionmaker(
-    engine_test, # type: ignore
+    engine_test,  # type: ignore
     class_=AsyncSession,
     expire_on_commit=False,
-) # type: ignore
+)  # type: ignore
 
 
 async def override_get_async_session():
-    async with AsyncSessionLocal() as session: # type: ignore
+    async with AsyncSessionLocal() as session:  # type: ignore
         yield session
 
 
@@ -41,7 +41,7 @@ async def prepare_database():
 @pytest_asyncio.fixture
 async def async_session():
     """Provide a transactional scope for each test."""
-    async with AsyncSessionLocal() as session: # type: ignore
+    async with AsyncSessionLocal() as session:  # type: ignore
         yield session
 
 

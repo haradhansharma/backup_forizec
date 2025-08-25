@@ -2,6 +2,7 @@
 # This file contains the configuration settings for the Forizec application.
 
 from pathlib import Path
+from typing import List
 
 from pydantic import computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -26,19 +27,29 @@ class Settings(BaseSettings):
     # Optional one-shot override
     DATABASE_URL: str | None = None
 
-    SECRET_KEY: str = "8f98e3609c5def7af9519661a25881125c769bc91e489e0f30c675bed209f4aa"
+    SECRET_KEY: str
 
     PROJECT_NAME: str = "Forizec"
     PROJECT_VERSION: str = "1.0.0"
     PROJECT_DESCRIPTION: str = "Forizec - A FastAPI Project"
     API_V1_STR: str = "/api/v1"
+    API_V2_STR: str = "/api/v2"
     BASE_DIR: Path = BASE_DIR
     STATIC_DIR: Path = BASE_DIR / "static"
     MEDIA_DIR: Path = BASE_DIR / "media"
     TEMPLATES_DIR: Path = BASE_DIR / "templates"
 
+    ALLOWED_HOSTS: list[str] = []
+    ALLOWED_ORIGIN: list[str] = []
+
+    CSRF_SECRET: str
+    CSRF_COOKIE_NAME: str = 'csrftoken'
+    CSRF_COOKIE_SECURE: bool = True if ENV == 'prod' else False
+    CSRF_COOKIE_SAMESITE: str = 'lax'
+    CSRF_HEADER_NAME: str = "x-csrftoken"
+
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=str(BASE_DIR / ".env"),
         env_file_encoding="utf-8",
         extra="ignore",
     )

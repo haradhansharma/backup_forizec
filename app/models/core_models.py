@@ -3,7 +3,13 @@ import datetime
 from sqlalchemy import Column, Integer, String, Text, Date, Boolean, ForeignKey, Index, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.types import Enum as SAEnum
-from .enums import UserRoleEnum, ComplienceStatusEnum, TaskStatusEnum, PriorityEnum, ReminderTypeEnum
+from .enums import (
+    UserRoleEnum,
+    ComplienceStatusEnum,
+    TaskStatusEnum,
+    PriorityEnum,
+    ReminderTypeEnum,
+)
 from sqlalchemy.orm import Mapped, mapped_column
 from app.core.db import Base
 from passlib.hash import bcrypt
@@ -23,7 +29,9 @@ class Service(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     description = Column(Text)
-    policies = relationship("Policy", back_populates="service", cascade="all, delete-orphan", lazy="selectin")
+    policies = relationship(
+        "Policy", back_populates="service", cascade="all, delete-orphan", lazy="selectin"
+    )
 
 
 class Policy(Base):
@@ -38,17 +46,27 @@ class Policy(Base):
         SAEnum(ComplienceStatusEnum, native_enum=False), default=ComplienceStatusEnum.PENDING
     )
     created_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc))
-    updated_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc), onupdate=datetime.datetime.now(datetime.timezone.utc))
+    updated_at = Column(
+        DateTime,
+        default=datetime.datetime.now(datetime.timezone.utc),
+        onupdate=datetime.datetime.now(datetime.timezone.utc),
+    )
 
     service = relationship("Service", back_populates="policies", lazy="joined")
-    procedures = relationship("Procedure", back_populates="policy", cascade="all, delete-orphan", lazy="selectin")
-    documents = relationship("Document", back_populates="policy", cascade="all, delete-orphan", lazy="selectin")
+    procedures = relationship(
+        "Procedure", back_populates="policy", cascade="all, delete-orphan", lazy="selectin"
+    )
+    documents = relationship(
+        "Document", back_populates="policy", cascade="all, delete-orphan", lazy="selectin"
+    )
     acceptances = relationship(
         "PolicyAcceptance", back_populates="policy", cascade="all, delete-orphan", lazy="selectin"
     )
 
     # Link to Risks:
-    risks = relationship("Risk", back_populates="related_policy", cascade="all, delete-orphan", lazy="selectin")
+    risks = relationship(
+        "Risk", back_populates="related_policy", cascade="all, delete-orphan", lazy="selectin"
+    )
 
 
 class Procedure(Base):
@@ -63,7 +81,11 @@ class Procedure(Base):
         SAEnum(ComplienceStatusEnum, native_enum=False), default=ComplienceStatusEnum.PENDING
     )
     created_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc))
-    updated_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc), onupdate=datetime.datetime.now(datetime.timezone.utc))
+    updated_at = Column(
+        DateTime,
+        default=datetime.datetime.now(datetime.timezone.utc),
+        onupdate=datetime.datetime.now(datetime.timezone.utc),
+    )
 
     policy = relationship("Policy", back_populates="procedures", lazy="joined")
     checklist_items = relationship(
@@ -72,12 +94,19 @@ class Procedure(Base):
     activities = relationship(
         "ActivityLog", back_populates="procedure", cascade="all, delete-orphan", lazy="selectin"
     )
-    documents = relationship("Document", back_populates="procedure", cascade="all, delete-orphan", lazy="selectin")
+    documents = relationship(
+        "Document", back_populates="procedure", cascade="all, delete-orphan", lazy="selectin"
+    )
     acceptances = relationship(
-        "ProcedureAcceptance", back_populates="procedure", cascade="all, delete-orphan", lazy="selectin"
+        "ProcedureAcceptance",
+        back_populates="procedure",
+        cascade="all, delete-orphan",
+        lazy="selectin",
     )
     # Link to Risks:
-    risks = relationship("Risk", back_populates="related_procedure", cascade="all, delete-orphan", lazy="selectin")
+    risks = relationship(
+        "Risk", back_populates="related_procedure", cascade="all, delete-orphan", lazy="selectin"
+    )
 
 
 class ChecklistItem(Base):
@@ -90,7 +119,11 @@ class ChecklistItem(Base):
     # is_completed = Column(Boolean, default=False)
     # completed_at = Column(DateTime)
     created_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc))
-    updated_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc), onupdate=datetime.datetime.now(datetime.timezone.utc))
+    updated_at = Column(
+        DateTime,
+        default=datetime.datetime.now(datetime.timezone.utc),
+        onupdate=datetime.datetime.now(datetime.timezone.utc),
+    )
 
     procedure = relationship("Procedure", back_populates="checklist_items", lazy="joined")
 
@@ -153,7 +186,9 @@ class User(Base):
     last_login = Column(DateTime)
 
     # backref relationships
-    documents = relationship("Document", back_populates="user", cascade="all, delete-orphan", lazy="selectin")
+    documents = relationship(
+        "Document", back_populates="user", cascade="all, delete-orphan", lazy="selectin"
+    )
     policy_acceptances = relationship(
         "PolicyAcceptance", back_populates="user", cascade="all, delete-orphan", lazy="selectin"
     )
@@ -164,9 +199,14 @@ class User(Base):
         "UserInvitation", back_populates="inviter", cascade="all, delete-orphan", lazy="selectin"
     )
     assigned_schedules = relationship(
-        "ComplianceSchedule", back_populates="assigned_user", cascade="all, delete-orphan", lazy="selectin"
+        "ComplianceSchedule",
+        back_populates="assigned_user",
+        cascade="all, delete-orphan",
+        lazy="selectin",
     )
-    reminders = relationship("Reminder", back_populates="user", cascade="all, delete-orphan", lazy="selectin")
+    reminders = relationship(
+        "Reminder", back_populates="user", cascade="all, delete-orphan", lazy="selectin"
+    )
 
     def verify_password(self, password: str) -> bool:
         return bcrypt.verify(password, self.hashed_password)
@@ -255,7 +295,9 @@ class UserInvitation(Base):
     accepted = Column(Boolean, default=False)
     accepted_at = Column(DateTime)
 
-    inviter = relationship("User", back_populates="invitations_sent", foreign_keys=[invited_by], lazy="joined")
+    inviter = relationship(
+        "User", back_populates="invitations_sent", foreign_keys=[invited_by], lazy="joined"
+    )
 
 
 class Reminder(Base):

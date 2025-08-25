@@ -16,6 +16,7 @@ from sqlalchemy.exc import IntegrityError
 # from sqlalchemy.ext.asyncio import async_engine_from_config
 from app.api.v1.routes import admin, auth, user
 from app.core.exceptions import register_exception_handlers
+from app.core.middleware import register_middleware
 from app.views.auth import router as web_auth_router
 from app.views.dashboard import router as web_dashboard_router
 from app.views.public import router as web_public_router
@@ -59,6 +60,7 @@ def create_app() -> FastAPI:
     )
 
     register_exception_handlers(app)
+    register_middleware(app)
 
     # Mount static files
     app.mount("/static", StaticFiles(directory=settings.STATIC_DIR), name="static")
@@ -76,21 +78,6 @@ def create_app() -> FastAPI:
     app.include_router(web_auth_router, tags=["web"])
     app.include_router(web_dashboard_router, tags=["web"])
     app.include_router(web_public_router, tags=["web"])
-
-    @app.middleware("http")
-    async def add_process_time_header(request: Request, call_next):
-        start_time = time.perf_counter()
-        try:
-            response = await call_next(request)
-        except Exception as exc:
-            logger.exception(f"Unhandled error while processing {request.url}")
-            raise  # Let your exception handlers catch it
-        process_time = time.perf_counter() - start_time
-        response.headers["X-Process-Time"] = f"{process_time:.4f} seconds"
-        logger.info(
-            f"{request.method} {request.url} - {response.status_code} [{process_time:.4f}s]"
-        )
-        return response
 
     return app
 

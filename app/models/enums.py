@@ -34,6 +34,7 @@ class PriorityEnum(str, enum.Enum):
     HIGH = "high"
     CRITICAL = "critical"
 
+
 class ReminderTypeEnum(str, enum.Enum):
     NONE = "None"
     TASK_DUE = "task_due"
