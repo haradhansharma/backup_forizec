@@ -1,5 +1,193 @@
-<h1>Welcome to Forizec</h1>
 
-<p>This is the homepage of the Forizec application.</p>
 
-{{request.url}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fourize - Australian Compliance & Risk Management Platform</title>
+    <link rel="stylesheet" href="/static/modern.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="landing-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="/static/logo.png" alt="Fourize Logo" class="logo">
+                <img src="{{ url_for('static', path='logo.png')}}" alt="Fourize Logo" class="logo">
+                <span class="logo-text">Fourize</span>
+            </div>
+            <div class="nav-actions">
+                <a href="/login" class="btn btn-primary">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">Australian Compliance Made Simple</h1>
+                <p class="hero-subtitle">
+                    Built from the ground up for Australian conditions — giving you full control, transparency, 
+                    and peace of mind under APES 320 and ASQM 1 requirements.
+                </p>
+                <div class="hero-actions">
+                    <a href="/login" class="btn btn-primary btn-large">Get Started</a>
+                    <a href="#features" class="btn btn-secondary btn-large">Learn More</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-card">
+                    <div class="hero-card-header">
+                        <h3>Compliance Dashboard</h3>
+                        <span class="status-badge status-active">Live</span>
+                    </div>
+                    <div class="hero-matrix">
+                        <div class="matrix-cell low">Low Risk</div>
+                        <div class="matrix-cell medium">Medium Risk</div>
+                        <div class="matrix-cell high">High Risk</div>
+                        <div class="matrix-cell extreme">Critical</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Comprehensive Compliance Solutions</h2>
+                <p>Everything you need to meet Australian accounting standards and stay audit-ready</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h3>Policy & Procedure Hub</h3>
+                    <p>Maintain, review, and version-control your firm's policies. Built-in reminders ensure nothing is missed.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚠️</div>
+                    <h3>Risk Assessment Dashboard</h3>
+                    <p>Visualise, score, and mitigate firm-level risks aligned with APES 320 and ASQM 1 requirements.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📝</div>
+                    <h3>Evidence & Review Logging</h3>
+                    <p>Track compliance activities, gather evidence, and generate reports for regulators or internal reviews.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📅</div>
+                    <h3>Compliance Scheduling</h3>
+                    <p>Never miss a deadline with automated reminders and compliance tracking for Australian standards.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Audit-Ready Reporting</h3>
+                    <p>Generate comprehensive reports that meet Australian regulatory requirements and audit standards.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Secure & Compliant</h3>
+                    <p>Enterprise-grade security with role-based access control and audit trails for Australian firms.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why This Matters Section -->
+    <section class="benefits">
+        <div class="container">
+            <div class="benefits-content">
+                <div class="benefits-text">
+                    <h2>Why This Matters Now</h2>
+                    <p class="benefits-intro">
+                        The move to individual firm responsibility under ASQM 1 and enhanced APES standards means 
+                        firms can no longer rely on passive compliance or third-party checklists.
+                    </p>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">⚡</div>
+                        <div class="benefit-content">
+                            <h3>Active Compliance Management</h3>
+                            <p>Take control of your compliance obligations with proactive risk management and monitoring.</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">🎯</div>
+                        <div class="benefit-content">
+                            <h3>Australian Standards Aligned</h3>
+                            <p>Built specifically for APES 320 and ASQM 1 requirements, not generic international standards.</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">🛡️</div>
+                        <div class="benefit-content">
+                            <h3>Audit-Ready Documentation</h3>
+                            <p>Maintain comprehensive evidence trails and documentation for regulatory reviews.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="benefits-visual">
+                    <div class="stats-card">
+                        <div class="stat-item">
+                            <div class="stat-number">100%</div>
+                            <div class="stat-label">APES Compliant</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">ASQM 1</div>
+                            <div class="stat-label">Ready</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">24/7</div>
+                            <div class="stat-label">Monitoring</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Book a Demo or Get in Touch</h2>
+                <p>Find out how Fourize can simplify your compliance burden and help you stay audit-ready.</p>
+                <a href="/login" class="btn btn-primary btn-large">Start Your Free Trial</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="landing-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Fourize</h4>
+                    <p>Empowering Australian accounting firms with intelligent compliance and risk management solutions built for local standards.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="/login">Login</a></li>
+                        <li><a href="/forgot-password">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Compliance</h4>
+                    <ul>
+                        <li><a href="#">APES 320</a></li>
+                        <li><a href="#">ASQM 1</a></li>
+                        <li><a href="#">Australian Standards</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Fourize. All rights reserved. Built for Australian accounting firms.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 

@@ -96,6 +96,10 @@ forizec
 -- schemas
 -- tests
 -- uils
+-- views
+--- public.py
+--- dashboard.py
+--- auth.py
 - data
 - env
 - media

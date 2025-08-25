@@ -33,3 +33,8 @@ class PriorityEnum(str, enum.Enum):
     MID = "mid"
     HIGH = "high"
     CRITICAL = "critical"
+
+class ReminderTypeEnum(str, enum.Enum):
+    NONE = "None"
+    TASK_DUE = "task_due"
+    POLICY_REVIEW = "policy_review"
